@@ -1,0 +1,106 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid me-4">
+
+        <a routerLink="/" class="navbar-brand ">
+            <span class="fs-4 ">
+                <img src="/assets/svg/HarvestReformedChurch.svg" width="50%" alt="Harvest Reformed Church"
+                    class="img-fluid me-md-5 me-sm-5">
+            </span>
+        </a>
+
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-label="Toggle navigation" [attr.aria-expanded]="!isCollapsed"
+            (click)="isCollapsed = !isCollapsed" [ngClass]="{'collapsed': isCollapsed }">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+
+<header class="sticky-top">
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid d-flex flex-wrap">
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngClass]="{'show': !isCollapsed}">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a routerLink="/" class="nav-link link-dark px-2 me-3" aria-current="page" (click)="toggleCollapse()">
+                            <fa-icon [icon]="faHome"></fa-icon>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link link-dark px-2 me-3" routerLink="/sermons" (click)="toggleCollapse()">Sermons</a>
+                    </li>
+
+                    <li class="nav-item" dropdown container="body">
+                        <a href id="what-we-do-link" dropdownToggle (click)="false"
+                            aria-controls="what-we-do-link-dropdown"
+                            class="nav-link dropdown-toggle link-dark px-2 me-3">
+                            What we do
+                        </a>
+                        <ul id="what-we-do-link-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
+                            aria-labelledby="what-we-do-link">
+                            <li role="menuitem">
+                                <a class="dropdown-item link-dark px-2" routerLink="/sunday-service" (click)="toggleCollapse()">
+                                    Sunday Service
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item link-dark px-2" routerLink="/bible-study" (click)="toggleCollapse()">
+                                    Bible Study
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="nav-item" dropdown container="body">
+                        <a href id="about-link" dropdownToggle aria-controls="about-link-dropdown" (click)="false"
+                            class="nav-link dropdown-toggle link-dark px-2 me-3">
+                            About
+                        </a>
+                        <ul id="about-link-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
+                            aria-labelledby="about-link">
+                            <li role="menuitem">
+                                <a class="dropdown-item link-dark px-2" routerLink="/who-we-are" (click)="toggleCollapse()">
+                                    Who we are?
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item link-dark px-2" routerLink="/what-we-believe" (click)="toggleCollapse()">
+                                    What we believe?
+                                </a>
+                            </li>
+                            <li class="divider dropdown-divider"></li>
+                            <li role="menuitem">
+                                <a class="dropdown-item link-dark px-2" routerLink="/leadership" (click)="toggleCollapse()">
+                                    Leadership
+                                </a>
+                            </li>
+                            <li class="divider dropdown-divider"></li>
+                            <li role="menuitem">
+                                <a class="dropdown-item link-dark px-2" routerLink="/contact-us" (click)="toggleCollapse()">
+                                    Contact us
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item link-dark px-2" routerLink="/give" (click)="toggleCollapse()">
+                                    Give
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav ms-2">
+                    <li class="nav-item">
+                        <a (click)="toggleCollapse()" class="nav-link" rel="noopener" target="_blank" href="https://www.facebook.com/people/Harvest-Reformed-Church/61560686762361/#" tabindex="-1" aria-disabled="true"><fa-icon
+                                [icon]="faFacebook"></fa-icon></a>
+                    </li>
+                    <li class="nav-item">
+                        <a (click)="toggleCollapse()" class="nav-link" target="_blank" rel="noopener" href="https://youtube.com/@harvestreformedchurch?si=WSgeDMvYZgx9SPKV"
+                            tabindex="-1" aria-disabled="true"><fa-icon [icon]="faYoutube"></fa-icon></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

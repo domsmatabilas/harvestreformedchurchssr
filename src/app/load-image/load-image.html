@@ -1,0 +1,5 @@
+<div [hidden]="!loading" class="spinner-border mx-auto my-auto d-block mt-4" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+
+<img [hidden]="loading" (load)="onLoad()" [width]="width" src="{{ imageUrl }}" class="{{ cssClass }}" alt="{{ altText }}" [style]="styleOverride">

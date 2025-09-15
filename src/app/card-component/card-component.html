@@ -1,0 +1,10 @@
+<div class="card">
+  <app-load-image [imageUrl]="imageUrl" [cssClass]="'card-img-top'" [altText]="'image'"></app-load-image>
+  <div class="card-body">
+    <h5 class="card-title">{{ title }}</h5>
+    <p class="card-text">{{ text }}</p>
+    @if(buttonText && link) {
+      <a [href]="link" class="btn btn-primary stretched-link">{{ buttonText }}</a>
+    }
+  </div>
+</div>

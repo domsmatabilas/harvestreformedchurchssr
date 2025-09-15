@@ -1,0 +1,23 @@
+<h3>{{pageTitle}}</h3>
+<div>
+    <form (ngSubmit)="addSermon(type)">
+        <label for="title">Title:</label>
+        <input type="text" id="title" [(ngModel)]="sermon.title" name="title" required>
+
+        <label for="speaker">Speaker:</label>
+        <input type="text" id="speaker" [(ngModel)]="sermon.speaker" name="speaker" required>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" [(ngModel)]="sermon.date" name="date" required>
+
+        <label for="verse">Verse:</label>
+        <input type="text" id="verse" [(ngModel)]="sermon.verse" name="verse">
+
+        <label for="verse">Video:</label>
+        <input type="text" id="verse" [(ngModel)]="sermon.videoUrl" name="verse">
+
+        <button type="submit">{{buttonText}}</button>
+    </form>
+    <a routerLink="/sermons">
+        <button>Back to Sermons</button>
+    </a>

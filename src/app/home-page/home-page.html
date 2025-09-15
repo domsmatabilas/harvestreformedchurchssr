@@ -1,0 +1,72 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <carousel [interval]="3000" [isAnimated]="true" [noPause]="false" [noWrap]="false">
+        <slide>
+          <app-load-image [imageUrl]="'../../assets/images/cropped-church.JPG'"
+            [cssClass]="'d-block w-100'" [altText]="'first slide'" [styleOverride]="'display: block; width: 100%;'"></app-load-image>
+          <div class="carousel-caption d-md-block">
+            <h1 class="fs-sm-1">Harvest Reformed Church</h1>
+            <p>“The fields are ripe”</p>
+          </div>
+        </slide>
+        <slide>
+          <app-load-image [imageUrl]="'../../assets/images/lunar.jpg'"
+            [cssClass]="'d-block w-100'" [altText]="'second slide'" [styleOverride]="'display: block; width: 100%;'"></app-load-image>
+          <div class="carousel-caption d-md-block">
+            <h1 class="fs-sm-1">Harvest Reformed Church</h1>
+            <p>“The fields are ripe”</p>
+          </div>
+        </slide>
+        <slide>
+          <app-load-image [imageUrl]="'../../assets/images/cropped-leaders.jpg'"
+            [cssClass]="'d-block w-100'" [altText]="'third slide'" [styleOverride]="'display: block; width: 100%;'"></app-load-image>
+          <div class="carousel-caption d-md-block">
+            <h1 class="fs-sm-1">Harvest Reformed Church</h1>
+            <p>“The fields are ripe”</p>
+          </div>
+        </slide>
+      </carousel>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 pt-4 pb-2">
+      <app-card-component [title]="'Sunday Service'"
+        [text]="'Hebrews 4:12 For the word of God is living and active, sharper than any two-edged sword, piercing to the division of soul and of spirit, of joints and of marrow, and discerning the thoughts and intentions of the heart.'"
+        [imageUrl]="'../../assets/images/cropped-worship.JPG'" [buttonText]="'Learn more'" [link]="'/sunday-service'" routerLink="/sunday-service">
+      </app-card-component>
+    </div>
+
+    <div class="col-sm-6 pt-4 pb-2">
+      <app-card-component [title]="'Praise & Worship'"
+        [text]="'Psalm 150:1-6 Praise the LORD. Praise God in his sanctuary; praise him in his mighty heavens. Praise him for his acts of power; praise him for his surpassing greatness. Praise him with the sounding of the trumpet ..'"
+        [imageUrl]="'../../assets/images/worship-team.jpeg'" [buttonText]="'Learn more'" [link]="'/sunday-service'">
+      </app-card-component>
+    </div>
+
+    <div class="col-sm-6 pt-2 pb-4">
+      <app-card-component [title]="'Fellowship'"
+        [text]="'Hebrews 10:24–25 And let us consider how to stir up one another to love and good works, not neglecting to meet together, as is the habit of some, but encouraging one another, and all the more as you see the Day drawing near.'"
+        [imageUrl]="'../../assets/images/fellowship.png'" [buttonText]="'Learn more'" [link]="'/sunday-service'">
+      </app-card-component>
+    </div>
+
+    <div class="col-sm-6 pt-2 pb-4">
+      <app-card-component [title]="'Bible Study & Prayer Meeting'"
+        [text]="'2 Timothy 3:16-17 All Scripture is breathed out by God and profitable for teaching, for reproof, for correction, and for training in righteousness, that the man of God[a] may be complete, equipped for every good work'"
+        [imageUrl]="'../../assets/images/bible-study.png'" [buttonText]="'Learn more'" [link]="'/bible-study'">
+      </app-card-component>
+    </div>
+
+  </div>
+
+  <div class="col-sm-12">
+    <app-map-component
+      [mapSrc]="'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.979078127491!2d144.73239637588864!3d-37.884171971957954!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad689004e269aa3%3A0xbb7f1cee23132b44!2sHarvest%20Reformed%20Church!5e0!3m2!1sen!2sau!4v1714301400527!5m2!1sen!2sau'"
+      [mapHeight]="'300px'" [mapWidth]="'100%'">
+    </app-map-component>
+  </div>
+</div>

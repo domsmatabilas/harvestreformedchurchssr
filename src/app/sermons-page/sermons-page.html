@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 pt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Sermons</h2>
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-2">
+                        <p> And they devoted themselves to the apostles' teaching and the fellowship, to the
+                            breaking of
+                            bread and the prayers.</p>
+                        <footer class="blockquote-footer"><cite title="Source Title">Acts 2:42 ESV</cite></footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <div class="scrollable-container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
+            (scrolled)="onScroll()" [infiniteScrollDisabled]="!hasMoreData">
+            <div class="row">
+                <div *ngFor="let sermon of sermons" class="col-xxl-3 col-lg-4 col-md-6 col-sm-12 mx-auto">
+                    <div class="card my-3">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <youtube-player class="card-img-top d-flex" videoId="{{ sermon.videoUrl }}"
+                                suggestedQuality="default" height="175">
+                            </youtube-player>
+                        </div>
+                        <div class="card-body">
+                            <div class="mt-2 text-center">
+                                <h6 class="card-title sermon-title">{{sermon.title}}</h6>
+                                <footer class="blockquote-footer mt-1 sermon-footer">
+                                    <cite>{{sermon.speaker}}</cite>
+                                    <p class="card-text">{{sermon.date}}</p>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+                <p style="font-size: 20px; color: white">Loading...</p>
+            </ngx-spinner>
+            <!-- <a routerLink="/sermons/{{sermon.id}}" class="btn btn-primary">View</a> -->
+
+            <!-- <a routerLink="/sermons/edit/{{sermon.id}}">Edit</a>
+            <button class="btn btn-primary" (click)="deleteSermon(sermon.id)">Delete</button> -->
+        </div>
+
+    </div>
+
+</div>

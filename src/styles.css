@@ -1,1 +1,113 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    background-color: whitesmoke;
+    overflow-x: hidden;
+    font-size: 16px;
+    color: #000000;
+}
+
+body:before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+}
+
+a {
+    color: #000000;
+}
+
+*[hidden] {
+    display: none !important;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.ng-fa-icon {
+    color: #000000;
+}
+
+.btn-primary,
+.btn-primary:active:focus {
+    background-color: #F0F0F0;
+    color: #000000;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #F0F0F0;
+    color: #A6A6A6;
+    border: none;
+}
+
+/*Navigation*/
+
+.navbar-default .navbar-nav>li>a {
+    color: #000000;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+    color: #A6A6A6;
+}
+
+.navbar-default {
+    background-color: whitesmoke;
+}
+
+.navbar-brand {
+    margin-right: 0;
+}
+
+.navbar-brand img {
+    width: 200px;
+}
+
+@media screen and (min-width: 992px) {
+    .navbar .container-fluid {
+        flex-direction: column;
+    }
+
+    .navbar .navbar-collapse {
+        margin-left: 17px;
+    }
+}
+
+.navbar-nav .nav-item {
+    margin-left: 15px;
+}
+
+youtube-player iframe {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.carousel-inner .item::before {
+    width: 100%;
+    height: 100%;
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* background: radial-gradient(ellipse, #fff 50%, black 100%); */
+    background: linear-gradient(to bottom, #fff 1%, black 100%);
+    z-index: 1;
+    mix-blend-mode: multiply;
+}
