@@ -31,7 +31,7 @@ export const routes: Routes = [
         data: {
             title: 'Harvest Reformed Church - Sermons',
             description: 'Every Sunday, we record our sermons so other people will also hear the truth from God`s word. You can find our past sermons on this page.',
-            keywords: 'Harvest Reformed Church Sermons'
+            keywords: 'Harvest Reformed Church Sermons, Bible Study, Sunday Service, Contact Us, Give'
         }
     },
     {
