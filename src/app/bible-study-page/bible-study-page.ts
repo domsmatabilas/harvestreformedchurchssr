@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CardComponent } from '../card-component/card-component';
 import { Meta } from '@angular/platform-browser';
+import { MapComponent } from '../map-component/map-component';
 
 @Component({
   selector: 'app-bible-study-page',
-  imports: [CardComponent],
+  imports: [CardComponent, MapComponent],
   templateUrl: './bible-study-page.html',
   styleUrl: './bible-study-page.css'
 })

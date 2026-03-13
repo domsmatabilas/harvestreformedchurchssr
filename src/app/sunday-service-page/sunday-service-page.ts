@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CardComponent } from '../card-component/card-component';
 import { Meta } from '@angular/platform-browser';
+import { MapComponent } from '../map-component/map-component';
 
 
 @Component({
   selector: 'app-sunday-service-page',
-  imports: [CardComponent],
+  imports: [CardComponent, MapComponent],
   templateUrl: './sunday-service-page.html',
   styleUrl: './sunday-service-page.css'
 })
