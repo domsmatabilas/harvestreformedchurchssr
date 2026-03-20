@@ -3,7 +3,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFacebook, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BsDropdownConfig, BsDropdownModule, } from 'ngx-bootstrap/dropdown';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
