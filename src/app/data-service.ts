@@ -10,6 +10,6 @@ export class DataService {
   constructor(private http: HttpClient) { }
 
   getSampleData(): Observable<Sermon[]> {
-    return this.http.get<Sermon[]>('https://drive.usercontent.google.com/u/0/uc?id=1-AB7K3sIFMu9RR14cVsXkhsManOBGnvU');
+    return this.http.get<Sermon[]>('assets/data.json');
   }
 }
