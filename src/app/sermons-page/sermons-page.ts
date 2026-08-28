@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { Sermon } from '../types';
+import {Sermon, SermonData, YtPlaylist} from '../types';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, Meta } from '@angular/platform-browser';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { DataService } from '../data-service';
 import { YouTubePlayerModule } from '@angular/youtube-player';
-import { delay } from 'rxjs';
+import {forkJoin, map, of} from 'rxjs';
 import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
+import {YoutubeDataService} from '../services/youtube-data.service';
 
 
 @Component({
@@ -18,9 +19,9 @@ import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
 export class SermonsPage {
   sermons: Sermon[] = [];
   page: number = 0;
-  limit: number = 6;
   hasMoreData: boolean = true;
   isLoading: boolean = false;
+  nextPageToken: string | undefined = undefined;
 
   toggleLoading = () => this.isLoading = !this.isLoading;
 
@@ -28,10 +29,10 @@ export class SermonsPage {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private dataService: DataService,
     private spinner: NgxSpinnerService,
-    private meta: Meta
-  ) { 
+    private meta: Meta,
+    private youtubeDataService: YoutubeDataService
+  ) {
     this.meta.removeTag('name="description"');
     this.meta.removeTag('name="keywords"');
     this.meta.removeTag('name="title"');
@@ -65,22 +66,41 @@ export class SermonsPage {
   loadItems(): void {
     if (!this.hasMoreData) return;
     this.spinner.show();
-    this.dataService.getSampleData().pipe(delay(1000)).subscribe(
-      (newItems: any[]) => {
-        this.sermons = [...this.sermons, ...newItems.slice(this.page, this.page + this.limit)];
-        this.page = this.page + this.limit;
-        if (this.page < this.limit) {
+
+    this.youtubeDataService.getYoutubeData(this.nextPageToken).pipe(
+      map((response: YtPlaylist) => {
+        const items: Sermon[] = response.items.map((item) => ({
+          title: item.snippet.title.includes(' | Harvest Reformed Church') ? item.snippet.title.replace(' | Harvest Reformed Church', '') : item.snippet.title,
+          date: item.snippet.publishedAt,
+          videoId: item.contentDetails.videoId,
+          description: item.snippet.description,
+        }));
+
+        const totalResults = response.pageInfo.totalResults;
+        const size = response.pageInfo.resultsPerPage;
+        const nextPageToken = response.nextPageToken;
+
+
+        return { items, nextPageToken, totalResults, size } as SermonData;
+      })
+    ).subscribe({
+      next: (data: SermonData) => {
+        const newItems = data.items;
+        this.sermons = [...this.sermons, ...newItems];
+        this.page = this.page + data.size;
+        if (this.page >= data.totalResults) {
           this.hasMoreData = false;
         }
+        this.nextPageToken = data.nextPageToken;
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error('Error fetching data:', error);
         this.spinner.hide();
       },
-      () => {
+      complete: () => {
         this.spinner.hide();
       }
-    );
+    });
   }
 
   onScroll(): void {

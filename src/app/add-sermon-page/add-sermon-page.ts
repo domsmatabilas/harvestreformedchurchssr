@@ -16,9 +16,7 @@ export class AddSermonPage {
   @Input() sermon: Sermon = {
     title: '',
     date: '',
-    speaker: '',
-    verse: '',
-    videoUrl: ''
+    videoId: ''
   };
 
   @Output() onSubmit = new EventEmitter<Sermon>();

@@ -10,16 +10,14 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './edit-sermon-page.css'
 })
 export class EditSermonPage {
-  sermon: Sermon = { 
+  sermon: Sermon = {
     title: '',
     date: '',
-    speaker: '',
-    verse: '',
-    videoUrl: ''
+    videoId: ''
   };
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private route: ActivatedRoute
   ) { }
 
