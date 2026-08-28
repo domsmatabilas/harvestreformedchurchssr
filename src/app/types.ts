@@ -22,7 +22,6 @@ export interface YtPlaylist {
 }
 
 export interface YtPlaylistItem {
-  id: string;
   snippet: {
     publishedAt: string;
     channelId: string;
@@ -32,9 +31,8 @@ export interface YtPlaylistItem {
     playlistId: string;
     position: number;
   };
-  contentDetails: {
+  id: {
     videoId: string;
-    videoPublishedAt: string;
   };
 }
 

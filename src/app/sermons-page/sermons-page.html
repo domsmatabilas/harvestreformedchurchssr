@@ -16,6 +16,19 @@
             </div>
         </div>
 
+        <div class="col-sm-6 form-group pt-4 mb-2">
+          <label for="daterangepicker">Filter by Date Range</label>
+          <input type="text"
+                 id="daterangepicker"
+                 placeholder="Date range filter"
+                 class="form-control"
+                 [(bsValue)]="bsRangeValue"
+                 (bsValueChange)="onDateRangeChange($event)"
+                 bsDaterangepicker
+                 [bsConfig]="{ rangeInputFormat: 'DD-MMM-YYYY', adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-default', isAnimated: true }"
+          >
+        </div>
+
         <div class="scrollable-container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
             (scrolled)="onScroll()" [infiniteScrollDisabled]="!hasMoreData">
             <div class="row">

@@ -24,4 +24,24 @@ export class YoutubeDataService {
 
     return this.http.get<YtPlaylist>(apiUrl, { params });
   }
+
+  findSermons(nextPageToken: string | undefined, publishedAfter: string, publishedBefore: string, order: string | 'date'): Observable<YtPlaylist> {
+    let params = new HttpParams()
+      .set('part', 'snippet')
+      .set('channelId', 'UCsFZQOWRbNqdsn5DtW3u6tA')
+      .set('key', 'AIzaSyBalAwxPfYlnzUPVxSzIohitpQVln9fdDw')
+      .set('maxResults', '6')
+      .set('order', order)
+      .set('publishedAfter', publishedAfter)
+      .set('publishedBefore', publishedBefore);
+
+    if (nextPageToken) {
+      params = params.set('pageToken', nextPageToken);
+    }
+
+    const apiUrl = `https://youtube.googleapis.com/youtube/v3/search`;
+
+    return this.http.get<YtPlaylist>(apiUrl, { params });
+  }
+
 }
