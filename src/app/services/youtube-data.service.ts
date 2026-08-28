@@ -30,7 +30,7 @@ export class YoutubeDataService {
       .set('part', 'snippet')
       .set('channelId', 'UCsFZQOWRbNqdsn5DtW3u6tA')
       .set('key', 'AIzaSyBalAwxPfYlnzUPVxSzIohitpQVln9fdDw')
-      .set('maxResults', '6')
+      .set('maxResults', '30')
       .set('order', order)
       .set('publishedAfter', publishedAfter)
       .set('publishedBefore', publishedBefore);

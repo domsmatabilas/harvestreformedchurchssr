@@ -23,6 +23,8 @@ export class SermonsPage {
   isLoading: boolean = false;
   nextPageToken: string | undefined = undefined;
   bsRangeValue: Date[] = [];
+  fromDate: Date | undefined = undefined;
+  toDate: Date | undefined = undefined;
 
   toggleLoading = () => this.isLoading = !this.isLoading;
 
@@ -74,7 +76,7 @@ export class SermonsPage {
     if (!this.hasMoreData) return;
     this.spinner.show();
 
-    this.youtubeDataService.findSermons(this.nextPageToken, '1970-01-01T00:00:00Z', new Date().toISOString(), 'date').pipe(
+    this.youtubeDataService.findSermons(this.nextPageToken, this.fromDate ? this.fromDate.toISOString() : '1970-01-01T00:00:00Z', this.toDate ? this.toDate.toISOString() : new Date().toISOString(), 'date').pipe(
       map((response: YtPlaylist) => {
         const items: Sermon[] = response.items.map((item) => ({
           title: item.snippet.title.includes(' | Harvest Reformed Church') ? item.snippet.title.replace(' | Harvest Reformed Church', '') : item.snippet.title,
@@ -113,6 +115,13 @@ export class SermonsPage {
   onDateRangeChange(event: any): void {
     const startDate = event[0];
     const endDate = event[1];
+
+    this.fromDate = startDate;
+    this.toDate = endDate;
+
+    this.nextPageToken = undefined;
+    this.page = 0;
+    this.sermons = [];
 
     if (startDate && endDate) {
       this.youtubeDataService.findSermons(this.nextPageToken, startDate.toISOString(), endDate.toISOString(), 'date').pipe(
