@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {afterNextRender, Component} from '@angular/core';
 import {Sermon, SermonData, YtPlaylist} from '../types';
 import {CommonModule} from '@angular/common';
 import {DomSanitizer, Meta} from '@angular/platform-browser';
@@ -9,15 +9,19 @@ import {YoutubeDataService} from '../services/youtube-data.service';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import {PaginationModule} from 'ngx-bootstrap/pagination';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {TypeaheadModule} from 'ngx-bootstrap/typeahead';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
   selector: 'app-sermons-page',
-  imports: [CommonModule, YouTubePlayerModule, NgxSpinnerModule, BsDatepickerModule, PaginationModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, YouTubePlayerModule, NgxSpinnerModule, BsDatepickerModule, PaginationModule, ReactiveFormsModule, FormsModule, TypeaheadModule, FaIconComponent],
   templateUrl: './sermons-page.html',
   styleUrl: './sermons-page.css'
 })
 export class SermonsPage {
+  faMagnifyingGlass = faMagnifyingGlass;
   sermons: Sermon[] = [];
   page: number = 0;
   isLoading: boolean = false;
@@ -26,10 +30,10 @@ export class SermonsPage {
   currentPage: number = 1;
   currentPageSize: number = 30;
   prevPageSize: number = 0;
-  fromDate: Date | undefined = undefined;
-  toDate: Date | undefined = undefined;
   totalItems: number = 0;
   itemsPerPage: number = 0;
+  searchQuery: string = '';
+  isSearching: boolean = false;
 
   toggleLoading = () => this.isLoading = !this.isLoading;
 
@@ -41,6 +45,13 @@ export class SermonsPage {
     private meta: Meta,
     private youtubeDataService: YoutubeDataService
   ) {
+    afterNextRender(() => {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+      this.apiLoaded = true;
+    });
+
     this.meta.removeTag('name="description"');
     this.meta.removeTag('name="keywords"');
     this.meta.removeTag('name="title"');
@@ -58,13 +69,7 @@ export class SermonsPage {
   }
 
   ngOnInit(): void {
-    if (!this.apiLoaded) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
-      this.apiLoaded = true;
-    }
-
+    this.isSearching = false;
     this.loadItems();
   }
 
@@ -80,7 +85,6 @@ export class SermonsPage {
     this.currentPage = event.page;
   }
 
-
   deleteSermon(id: string) {
     throw new Error('Method not implemented.');
   }
@@ -92,7 +96,10 @@ export class SermonsPage {
   loadItems(query?: string, nextPage?: boolean): void {
     this.spinner.show();
 
-    this.youtubeDataService.getYoutubeData(query).pipe(
+    (this.isSearching ?
+      this.youtubeDataService.findSermons(query, this.searchQuery) :
+      this.youtubeDataService.getYoutubeData(query))
+      .pipe(
       map((response: YtPlaylist) => {
         const items: Sermon[] = response.items.map((item) => ({
           title: item.snippet.title.includes(' | Harvest Reformed Church') ? item.snippet.title.replace(' | Harvest Reformed Church', '') : item.snippet.title,
@@ -119,7 +126,7 @@ export class SermonsPage {
         this.totalItems = data.totalResults;
         this.itemsPerPage = data.size;
 
-        if (nextPage === undefined) {
+        if ((nextPage === undefined && data.nextPageToken === undefined) || data.totalResults === newItems.length) {
           this.currentPageSize = newItems.length;
         } else if (nextPage) {
           this.currentPageSize = this.currentPageSize + newItems.length;
@@ -127,9 +134,9 @@ export class SermonsPage {
           this.currentPageSize = this.currentPageSize - this.prevPageSize;
         }
 
-        if(data.nextPageToken === undefined && nextPage) {
+        if (data.nextPageToken === undefined && nextPage) {
           this.prevPageSize = newItems.length;
-        } else if(data.prevPageToken && data.nextPageToken) {
+        } else if (data.prevPageToken && data.nextPageToken) {
           this.prevPageSize = data.size;
         }
       },
@@ -144,19 +151,21 @@ export class SermonsPage {
   }
 
 
-  onDateRangeChange(event: any): void {
-    const startDate = event[0];
-    const endDate = event[1];
+  onSearch(): void {
+    if(!this.searchQuery){
+      this.isSearching = false;
 
-    this.fromDate = startDate;
-    this.toDate = endDate;
+      this.loadItems();
+      return;
+    }
 
+    this.isSearching = true;
     this.nextPageToken = undefined;
     this.page = 0;
     this.sermons = [];
 
-    if (startDate && endDate) {
-      this.youtubeDataService.findSermons(this.nextPageToken, startDate.toISOString(), endDate.toISOString(), 'date').pipe(
+    if (this.searchQuery) {
+      this.youtubeDataService.findSermons(this.nextPageToken, this.searchQuery).pipe(
         map((response: YtPlaylist) => {
           const items: Sermon[] = response.items.map((item) => ({
             title: item.snippet.title.includes(' | Harvest Reformed Church') ? item.snippet.title.replace(' | Harvest Reformed Church', '') : item.snippet.title,
@@ -175,10 +184,23 @@ export class SermonsPage {
         next: (data: SermonData) => {
           const newItems = data.items;
           this.sermons = [...newItems];
+
+          this.nextPageToken = data.nextPageToken;
+          this.prevPageToken = data.prevPageToken;
           this.totalItems = data.totalResults;
           this.itemsPerPage = data.size;
 
-          this.nextPageToken = data.nextPageToken;
+          if (data.nextPageToken === undefined || data.totalResults === newItems.length) {
+            this.currentPageSize = newItems.length;
+          } else {
+            this.currentPageSize = data.size;
+          }
+
+          if (data.nextPageToken === undefined) {
+            this.prevPageSize = newItems.length;
+          } else if (data.prevPageToken && data.nextPageToken) {
+            this.prevPageSize = data.size;
+          }
         },
         error: (error: any) => {
           console.error('Error fetching data:', error);

@@ -16,7 +16,17 @@
       </div>
     </div>
 
-    <div class=" mt-4 d-flex ms-auto justify-content-between align-items-center">
+    <div class="mt-4 col-sm-6">
+      <div class="input-group">
+        <input type="search" class="form-control" placeholder="Search for title or scripture..." (keyup.enter)="onSearch()" aria-label="Search" [(ngModel)]="searchQuery">
+        <button class="btn btn-outline-secondary" type="submit" id="button-search" (submit)="onSearch()" (click)="onSearch()">
+          <fa-icon
+            [icon]="faMagnifyingGlass"></fa-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-4 d-flex ms-auto justify-content-between align-items-center">
       <div>
         <pagination
           [totalItems]="totalItems"
@@ -35,19 +45,6 @@
         <p>{{ currentPageSize }} / {{ totalItems }} sermons</p>
       </div>
     </div>
-
-    <!--        <div class="col-sm-6 form-group pt-4 mb-2">-->
-    <!--          <label for="daterangepicker">Filter by Date Range</label>-->
-    <!--          <input type="text"-->
-    <!--                 id="daterangepicker"-->
-    <!--                 placeholder="Date range filter"-->
-    <!--                 class="form-control"-->
-    <!--                 [(bsValue)]="bsRangeValue"-->
-    <!--                 (bsValueChange)="onDateRangeChange($event)"-->
-    <!--                 bsDaterangepicker-->
-    <!--                 [bsConfig]="{ rangeInputFormat: 'DD-MMM-YYYY', adaptivePosition: true, dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-default', isAnimated: true }"-->
-    <!--          >-->
-    <!--        </div>-->
 
     <div class="container-fluid">
       <div class="row">

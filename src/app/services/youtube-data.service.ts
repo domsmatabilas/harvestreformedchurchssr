@@ -11,7 +11,7 @@ export class YoutubeDataService {
 
   getYoutubeData(query: string | undefined): Observable<YtPlaylist> {
     let params = new HttpParams()
-      .set('part', 'snippet,contentDetails')
+      .set('part', 'snippet')
       .set('playlistId', 'UUsFZQOWRbNqdsn5DtW3u6tA')
       .set('key', 'AIzaSyBalAwxPfYlnzUPVxSzIohitpQVln9fdDw')
       .set('maxResults', '30');
@@ -25,15 +25,14 @@ export class YoutubeDataService {
     return this.http.get<YtPlaylist>(apiUrl, { params });
   }
 
-  findSermons(nextPageToken: string | undefined, publishedAfter: string, publishedBefore: string, order: string | 'date'): Observable<YtPlaylist> {
+  findSermons(nextPageToken: string | undefined, searchQuery: string): Observable<YtPlaylist> {
     let params = new HttpParams()
       .set('part', 'snippet')
       .set('channelId', 'UCsFZQOWRbNqdsn5DtW3u6tA')
       .set('key', 'AIzaSyBalAwxPfYlnzUPVxSzIohitpQVln9fdDw')
       .set('maxResults', '30')
-      .set('order', order)
-      .set('publishedAfter', publishedAfter)
-      .set('publishedBefore', publishedBefore);
+      .set('type', 'video')
+      .set('q', searchQuery);
 
     if (nextPageToken) {
       params = params.set('pageToken', nextPageToken);
