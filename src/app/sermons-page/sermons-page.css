@@ -18,3 +18,15 @@
         padding-bottom: 50%;
     }
 
+    /* Hide all list items by default inside this specific pagination class */
+    .prev-next-only .pagination .pagination-page .page-item {
+      display: none !important;
+    }
+
+    /* Force display only for the Previous and Next buttons */
+    .prev-next-only .pagination .page-item.pagination-prev,
+    .prev-next-only .pagination .page-item.pagination-next,
+    .prev-next-only .pagination .page-item:first-child,
+    .prev-next-only .pagination .page-item:last-child {
+      display: block !important;
+    }

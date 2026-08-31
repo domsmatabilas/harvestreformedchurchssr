@@ -14,7 +14,7 @@ export class YoutubeDataService {
       .set('part', 'snippet,contentDetails')
       .set('playlistId', 'UUsFZQOWRbNqdsn5DtW3u6tA')
       .set('key', 'AIzaSyBalAwxPfYlnzUPVxSzIohitpQVln9fdDw')
-      .set('maxResults', '6');
+      .set('maxResults', '30');
 
     if (query) {
       params = params.set('pageToken', query);

@@ -1,5 +1,6 @@
 export interface SermonData {
   nextPageToken?: string;
+  prevPageToken?: string;
   items: Sermon[];
   totalResults: number;
   size: number;
@@ -14,6 +15,7 @@ export interface Sermon {
 
 export interface YtPlaylist {
   nextPageToken?: string;
+  prevPageToken?: string;
   items: YtPlaylistItem[];
   pageInfo: {
     totalResults: number;
@@ -30,6 +32,10 @@ export interface YtPlaylistItem {
     channelTitle: string;
     playlistId: string;
     position: number;
+    resourceId: {
+      kind: string;
+      videoId: string;
+    };
   };
   id: {
     videoId: string;

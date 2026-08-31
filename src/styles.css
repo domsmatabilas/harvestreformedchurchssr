@@ -111,3 +111,27 @@ youtube-player iframe {
     z-index: 1;
     mix-blend-mode: multiply;
 }
+
+.page-item:not(:first-child):not(:last-child) {
+  display: none;
+}
+
+.page-item .page-link {
+  color: black;
+}
+
+.disabled > .page-link, .page-link.disabled {
+  color: #A6A6A6;
+  pointer-events: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.page-item .page-link:hover {
+  background-color: #A6A6A6;
+}
+
+.page-item .page-link:disabled {
+  color: #A6A6A6;
+}

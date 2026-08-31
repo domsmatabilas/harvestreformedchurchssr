@@ -2,29 +2,34 @@ import {Component} from '@angular/core';
 import {Sermon, SermonData, YtPlaylist} from '../types';
 import {CommonModule} from '@angular/common';
 import {DomSanitizer, Meta} from '@angular/platform-browser';
-import {InfiniteScrollDirective} from 'ngx-infinite-scroll';
 import {YouTubePlayerModule} from '@angular/youtube-player';
 import {map} from 'rxjs';
 import {NgxSpinnerModule, NgxSpinnerService} from "ngx-spinner";
 import {YoutubeDataService} from '../services/youtube-data.service';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+import {PaginationModule} from 'ngx-bootstrap/pagination';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 @Component({
   selector: 'app-sermons-page',
-  imports: [CommonModule, InfiniteScrollDirective, YouTubePlayerModule, NgxSpinnerModule, BsDatepickerModule],
+  imports: [CommonModule, YouTubePlayerModule, NgxSpinnerModule, BsDatepickerModule, PaginationModule, ReactiveFormsModule, FormsModule],
   templateUrl: './sermons-page.html',
   styleUrl: './sermons-page.css'
 })
 export class SermonsPage {
   sermons: Sermon[] = [];
   page: number = 0;
-  hasMoreData: boolean = true;
   isLoading: boolean = false;
   nextPageToken: string | undefined = undefined;
-  bsRangeValue: Date[] = [];
+  prevPageToken: string | undefined = undefined;
+  currentPage: number = 1;
+  currentPageSize: number = 30;
+  prevPageSize: number = 0;
   fromDate: Date | undefined = undefined;
   toDate: Date | undefined = undefined;
+  totalItems: number = 0;
+  itemsPerPage: number = 0;
 
   toggleLoading = () => this.isLoading = !this.isLoading;
 
@@ -63,6 +68,19 @@ export class SermonsPage {
     this.loadItems();
   }
 
+  onPageChange(event: any): void {
+    if (event.page === this.currentPage) {
+      return;
+    } else if (event.page < this.currentPage) {
+      this.loadItems(this.prevPageToken, false)
+    } else {
+      this.loadItems(this.nextPageToken, true);
+    }
+
+    this.currentPage = event.page;
+  }
+
+
   deleteSermon(id: string) {
     throw new Error('Method not implemented.');
   }
@@ -71,36 +89,49 @@ export class SermonsPage {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-
-  loadItems(): void {
-    if (!this.hasMoreData) return;
+  loadItems(query?: string, nextPage?: boolean): void {
     this.spinner.show();
 
-    this.youtubeDataService.findSermons(this.nextPageToken, this.fromDate ? this.fromDate.toISOString() : '1970-01-01T00:00:00Z', this.toDate ? this.toDate.toISOString() : new Date().toISOString(), 'date').pipe(
+    this.youtubeDataService.getYoutubeData(query).pipe(
       map((response: YtPlaylist) => {
         const items: Sermon[] = response.items.map((item) => ({
           title: item.snippet.title.includes(' | Harvest Reformed Church') ? item.snippet.title.replace(' | Harvest Reformed Church', '') : item.snippet.title,
           date: item.snippet.publishedAt,
-          videoId: item.id.videoId,
+          videoId: item.id?.videoId ? item.id.videoId : item.snippet.resourceId.videoId,
           description: item.snippet.description,
         }));
 
         const totalResults = response.pageInfo.totalResults;
         const size = response.pageInfo.resultsPerPage;
         const nextPageToken = response.nextPageToken;
+        const prevPageToken = response.prevPageToken;
 
 
-        return {items, nextPageToken, totalResults, size} as SermonData;
+        return {items, nextPageToken, prevPageToken, totalResults, size} as SermonData;
       })
     ).subscribe({
       next: (data: SermonData) => {
         const newItems = data.items;
-        this.sermons = [...this.sermons, ...newItems];
-        this.page = this.page + data.size;
-        if (this.page >= data.totalResults) {
-          this.hasMoreData = false;
-        }
+        this.sermons = [...newItems];
+
         this.nextPageToken = data.nextPageToken;
+        this.prevPageToken = data.prevPageToken;
+        this.totalItems = data.totalResults;
+        this.itemsPerPage = data.size;
+
+        if (nextPage === undefined) {
+          this.currentPageSize = newItems.length;
+        } else if (nextPage) {
+          this.currentPageSize = this.currentPageSize + newItems.length;
+        } else {
+          this.currentPageSize = this.currentPageSize - this.prevPageSize;
+        }
+
+        if(data.nextPageToken === undefined && nextPage) {
+          this.prevPageSize = newItems.length;
+        } else if(data.prevPageToken && data.nextPageToken) {
+          this.prevPageSize = data.size;
+        }
       },
       error: (error: any) => {
         console.error('Error fetching data:', error);
@@ -111,6 +142,7 @@ export class SermonsPage {
       }
     });
   }
+
 
   onDateRangeChange(event: any): void {
     const startDate = event[0];
@@ -143,10 +175,9 @@ export class SermonsPage {
         next: (data: SermonData) => {
           const newItems = data.items;
           this.sermons = [...newItems];
-          this.page = this.page + data.size;
-          if (this.page >= data.totalResults) {
-            this.hasMoreData = false;
-          }
+          this.totalItems = data.totalResults;
+          this.itemsPerPage = data.size;
+
           this.nextPageToken = data.nextPageToken;
         },
         error: (error: any) => {
